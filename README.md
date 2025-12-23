@@ -69,13 +69,39 @@ Edit `docker-compose.yml` to customize:
 
 ## Performance (Ryzen AI Max+ 395)
 
-| Context | KV Cache | Prompt Speed | Generation |
-|---------|----------|--------------|------------|
-| 1M tokens | 52 GB (q8_0) | ~400-480 tok/s | ~35-40 tok/s |
-| 1M tokens | 27 GB (q4_0) | ~450-500 tok/s | ~38-42 tok/s |
+| Model | Context | KV Cache | Prompt Speed | Generation |
+|-------|---------|----------|--------------|------------|
+| Q8_K_XL | 1M tokens | 52 GB (q8_0) | ~400-480 tok/s | ~35-40 tok/s |
+| Q4_K_XL | 1M tokens | 27 GB (q4_0) | ~450-500 tok/s | ~38-42 tok/s |
 
 > **Note:** The first request after startup is slower (~120 tok/s) due to Vulkan shader
 > compilation. Subsequent requests achieve full speed.
+
+## Performance (Ryzen 9 7940HS)
+
+| Model | Context | KV Cache | RAM | Prompt Speed | Generation |
+|-------|---------|----------|-----|--------------|------------|
+| Q4_K_XL | 512K tokens | q4_0 | 64 GB | ~30 tok/s | ~31 tok/s |
+
+> **Note:** The Radeon 780M iGPU has less memory bandwidth than the Radeon 8060S. The 1M token
+> context exceeds available GPU memory; 512K is the maximum tested configuration on this system.
+
+## Performance (Ryzen 7 5700G)
+
+| Model | Context | KV Cache | RAM | Prompt Speed | Generation |
+|-------|---------|----------|-----|--------------|------------|
+| Q4_K_XL | 256K tokens | q4_0 | 64 GB | ~74 tok/s | ~13 tok/s |
+
+> **Note:** The Radeon Vega iGPU (Zen 3) with DDR4-3600 has less bandwidth than newer systems.
+> The 512K context exceeds available GPU memory; 256K is the maximum tested configuration.
+
+## Performance Summary
+
+| System | GPU | RAM | Max Context | Prompt | Generation |
+|--------|-----|-----|-------------|--------|------------|
+| Ryzen AI Max+ 395 | Radeon 8060S | 128GB | 1M | ~450 tok/s | ~40 tok/s |
+| Ryzen 9 7940HS | Radeon 780M | 64GB DDR5 | 512K | ~30 tok/s | ~31 tok/s |
+| Ryzen 7 5700G | Radeon Vega | 64GB DDR4 | 256K | ~74 tok/s | ~13 tok/s |
 
 ## System Requirements
 

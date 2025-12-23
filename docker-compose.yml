@@ -45,14 +45,14 @@ services:
       # Model configuration (download with ./download-model.sh or ./download-model-q4.sh)
       # Q8 model (default): Qwen3-Coder-30B-A3B-Instruct-1M-UD-Q8_K_XL.gguf
       # Q4 model (smaller): Qwen3-Coder-30B-A3B-Instruct-1M-UD-Q4_K_XL.gguf
-      - MODEL_PATH=/models/Qwen3-Coder-30B-A3B-Instruct-1M-UD-Q8_K_XL.gguf
+      - MODEL_PATH=/models/Qwen3-Coder-30B-A3B-Instruct-1M-UD-Q4_K_XL.gguf
       - MODEL_ALIAS=qwen3-coder
 
       # GPU layers - Vulkan backend (999 = all layers on GPU)
       - GPU_LAYERS=999
 
-      # Context window - MAXIMUM (1M tokens with YaRN scaling)
-      - CTX_SIZE=1048576
+      # Context window - reduced for Radeon 780M
+      - CTX_SIZE=524288
 
       # Single slot for maximum context per request
       - PARALLEL=1
@@ -63,7 +63,7 @@ services:
 
       # KV cache quantization: q8_0 for quality, q4_0 for max context
       # Options: f32, f16, bf16, q8_0, q4_0, q4_1, iq4_nl, q5_0, q5_1
-      - KV_CACHE_TYPE=q8_0
+      - KV_CACHE_TYPE=q4_0
 
       # Batch sizes
       - BATCH_SIZE=2048
@@ -86,13 +86,13 @@ services:
       - "44"    # video
       - "992"   # render (adjust if different on your system)
 
-    # Memory limits (adjust based on your system)
+    # Memory limits (adjusted for 64GB system)
     deploy:
       resources:
         limits:
-          memory: 120G
+          memory: 50G
         reservations:
-          memory: 100G
+          memory: 30G
 
 volumes:
   llama-cache:
